@@ -61,31 +61,8 @@ void HTTPRequest::receivedResponse()
 	}
 }
 
-void HTTPRequest::start()
-{
-	_request.setRawHeader("DEVICE", _request.rawHeader("DEVICE"));
+void HTTPRequest::willStart() {
 
-	HTTPClient *client = HTTPClient::SharedInstance();
-
-	switch (_type) {
-		case HTTPRequestTypeGET: {
-			QNetworkReply *reply = client->accessManager()->get(_request);
-			connect(reply, SIGNAL(finished()), this, SLOT(receivedResponse()));
-			break;
-		} case HTTPRequestTypePOST: {
-			QNetworkReply *reply = client->accessManager()->post(_request, _data);
-			connect(reply, SIGNAL(finished()), this, SLOT(receivedResponse()));
-			break;
-		} case HTTPRequestTypePUT: {
-			QNetworkReply *reply = client->accessManager()->put(_request, _data);
-			connect(reply, SIGNAL(finished()), this, SLOT(receivedResponse()));
-			break;
-		} case HTTPRequestTypeDELETE: {
-			QNetworkReply *reply = client->accessManager()->deleteResource(_request);
-			connect(reply, SIGNAL(finished()), this, SLOT(receivedResponse()));
-			break;
-		}
-	}
 }
 
 HTTPRequest::~HTTPRequest() {

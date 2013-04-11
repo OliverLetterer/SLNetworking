@@ -23,7 +23,7 @@ public:
 
 	HTTPJSONRequest(const HTTPJSONRequest &other);
 
-	void start(void);
+	void willStart(void);
 	QVariant responseObject();
 
 private:

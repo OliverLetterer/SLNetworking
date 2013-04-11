@@ -27,11 +27,11 @@ HTTPJSONRequest::HTTPJSONRequest(const HTTPJSONRequest& other) : HTTPRequest(HTT
 
 }
 
-void HTTPJSONRequest::start()
+void HTTPJSONRequest::willStart()
 {
-	connect(this, SIGNAL(success(const QByteArray&)), this, SLOT(successCallback(const QByteArray&)));
+	HTTPRequest::willStart();
 
-	HTTPRequest::start();
+	connect(this, SIGNAL(success(const QByteArray&)), this, SLOT(successCallback(const QByteArray&)));
 }
 
 QVariant HTTPJSONRequest::responseObject()

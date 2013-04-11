@@ -11,16 +11,18 @@
 #include <QtCore/QObject>
 #include <QtNetwork>
 #include "HTTPRequest.h"
+#include <bb/device/HardwareInfo>
+#include <bb/data/JsonDataAccess>
 
+using namespace bb::data;
 
 
 namespace SL {
 
+template <class T>
 class HTTPClient : public QObject {
-	Q_OBJECT
-
 public:
-	static HTTPClient *SharedInstance();
+	static T *SharedInstance();
 
 	// managing HTTP headers
 	void setDefaultHeaderValue(const QString &headerField, const QString &value);
@@ -34,9 +36,11 @@ public:
 	// debugging
 	void log(void);
 
-private:
-	HTTPClient();
+protected:
+	HTTPClient(const QString &baseURL);
 	virtual ~HTTPClient();
+
+private:
 	HTTPClient(const HTTPClient&) : QObject(NULL) {}
 	HTTPClient& operator=(const HTTPClient&) { return *this; }
 
@@ -44,6 +48,74 @@ private:
 	QMap<QString, QString> _defaultHeaders;
 	QString _baseURL;
 };
+
+
+
+template <class T>
+HTTPClient<T>::HTTPClient(const QString &baseURL) : QObject(), _accessManager(new QNetworkAccessManager(this)), _defaultHeaders(), _baseURL(baseURL)
+{
+	// TODO: set previous authorization
+	/*
+	if (self.authorizationUsername && self.authorizationPassword) {
+		[self setAuthorizationHeaderWithUsername:self.authorizationUsername password:self.authorizationPassword];
+	}
+	 */
+}
+
+template <class T>
+HTTPClient<T>::~HTTPClient()
+{
+
+}
+
+template <class T>
+T *HTTPClient<T>::SharedInstance()
+{
+	static T *instance = new T();
+	return instance;
+}
+
+template <class T>
+void HTTPClient<T>::setDefaultHeaderValue(const QString &headerField, const QString &value)
+{
+	_defaultHeaders[headerField] = value;
+}
+
+template <class T>
+void HTTPClient<T>::setAuthorizationHeader(const QString &username, const QString &password)
+{
+	QString headerField = "Authorization";
+	QString value = "Basic " + QByteArray(QString("%1:%2").arg(username).arg(password).toAscii()).toBase64();
+	setDefaultHeaderValue(headerField, value);
+}
+
+template <class T>
+QNetworkRequest HTTPClient<T>::requestToPath(const QString &path)
+{
+	QString URL = _baseURL.append(path);
+	QNetworkRequest request(URL);
+
+	// apply default header values
+	QMap<QString, QString>::const_iterator i = _defaultHeaders.constBegin();
+	while (i != _defaultHeaders.constEnd()) {
+		request.setRawHeader(i.key().toUtf8(), i.value().toUtf8());
+		++i;
+	}
+
+	return request;
+}
+
+template <class T>
+QNetworkAccessManager *HTTPClient<T>::accessManager(void) const
+{
+	return _accessManager;
+}
+
+template <class T>
+void HTTPClient<T>::log(void)
+{
+	qDebug() << _defaultHeaders;
+}
 
 } /* namespace SL */
 #endif /* HTTPCLIENT_H_ */
