@@ -46,7 +46,7 @@ private:
 
 	QNetworkAccessManager *_accessManager;
 	QMap<QString, QString> _defaultHeaders;
-	QString _baseURL;
+	const QString _baseURL;
 };
 
 
@@ -92,7 +92,7 @@ void HTTPClient<T>::setAuthorizationHeader(const QString &username, const QStrin
 template <class T>
 QNetworkRequest HTTPClient<T>::requestToPath(const QString &path)
 {
-	QString URL = _baseURL.append(path);
+	QString URL = QString(_baseURL).append(path);
 	QNetworkRequest request(URL);
 
 	// apply default header values
@@ -114,7 +114,9 @@ QNetworkAccessManager *HTTPClient<T>::accessManager(void) const
 template <class T>
 void HTTPClient<T>::log(void)
 {
+	qDebug() << "HTTPClient:";
 	qDebug() << _defaultHeaders;
+	qDebug() << _baseURL;
 }
 
 } /* namespace SL */
