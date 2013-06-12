@@ -42,7 +42,7 @@ protected Q_SLOTS:
 
 Q_SIGNALS:
 	void success(const QByteArray &response);
-	void failure(const QString &error);
+	void failure(QNetworkReply *reply);
 
 private:
     QNetworkRequest _request;

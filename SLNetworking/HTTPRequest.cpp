@@ -55,7 +55,7 @@ void HTTPRequest::receivedResponse()
 
 	if (error) {
 		qDebug() << response;
-		emit failure(QString::fromUtf8(response));
+		emit failure(reply);
 	} else {
 		emit success(response);
 	}
