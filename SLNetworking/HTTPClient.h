@@ -13,6 +13,7 @@
 #include "HTTPRequest.h"
 #include <bb/device/HardwareInfo>
 #include <bb/data/JsonDataAccess>
+#include <QUrl>
 
 using namespace bb::data;
 
@@ -92,7 +93,12 @@ void HTTPClient<T>::setAuthorizationHeader(const QString &username, const QStrin
 template <class T>
 QNetworkRequest HTTPClient<T>::requestToPath(const QString &path)
 {
-	QString URL = QString(_baseURL).append(path);
+	QString URL = QString(_baseURL);
+	if (QUrl(path).host().length() == 0) {
+		URL = URL.append(path);
+	} else {
+		URL = path;
+	}
 	QNetworkRequest request(URL);
 
 	// apply default header values

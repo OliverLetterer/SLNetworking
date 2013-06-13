@@ -33,6 +33,11 @@ QNetworkRequest HTTPRequest::request(void) const
 	return _request;
 }
 
+void HTTPRequest::_downloadProgress(qint64 recieved, qint64 total)
+{
+	emit downloadProgress(recieved, total);
+}
+
 void HTTPRequest::receivedResponse()
 {
 	QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
