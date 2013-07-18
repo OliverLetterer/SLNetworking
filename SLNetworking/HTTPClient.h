@@ -37,10 +37,13 @@ public:
 	// debugging
 	void log(void);
 
-	QString baseURL(void) {
+	QString baseURL(void) const {
 		return _baseURL;
 	}
 
+	void setBaseURL(QString baseURL) {
+		_baseURL = baseURL;
+	}
 protected:
 	HTTPClient(const QString &baseURL);
 	virtual ~HTTPClient();
@@ -51,7 +54,7 @@ private:
 
 	QNetworkAccessManager *_accessManager;
 	QMap<QString, QString> _defaultHeaders;
-	const QString _baseURL;
+	QString _baseURL;
 };
 
 
