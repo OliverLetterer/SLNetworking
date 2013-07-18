@@ -37,6 +37,10 @@ public:
 	// debugging
 	void log(void);
 
+	QString baseURL(void) {
+		return _baseURL;
+	}
+
 protected:
 	HTTPClient(const QString &baseURL);
 	virtual ~HTTPClient();
