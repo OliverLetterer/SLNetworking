@@ -67,7 +67,16 @@ void HTTPRequest::receivedResponse()
 }
 
 void HTTPRequest::willStart() {
+/*
+	qDebug() << _request.url();
 
+	QList<QByteArray> list = _request.rawHeaderList();
+	QList<QByteArray>::iterator i = list.begin();
+	while (i != list.end()) {
+		qDebug() << *i << ":" << _request.rawHeader(*i);
+		++i;
+	}
+*/
 }
 
 HTTPRequest::~HTTPRequest() {
