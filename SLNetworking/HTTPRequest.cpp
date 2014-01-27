@@ -59,7 +59,6 @@ void HTTPRequest::receivedResponse()
 	}
 
 	if (error) {
-		qDebug() << response;
 		emit failure(reply);
 	} else {
 		emit success(response);

@@ -44,8 +44,6 @@ void HTTPJSONRequest::successCallback(const QByteArray &response)
 	JsonDataAccess jsonAccess;
 	_reponseObject = jsonAccess.loadFromBuffer(response);
 
-	qDebug() << _reponseObject;
-
 	emit receivedJSONObject(_reponseObject);
 }
 
